@@ -4,14 +4,21 @@ close all;
 lightColor = [1 1 1];
 % surfaceType = shiny
 surfaceType = 'shiny';
-ka = 0.1;
-kd = 0.4;
+ka = 0.2;
+kd = 0.5;
 ks = 0.5;
 ke = 5.0;
 scr = 1.0; % reflected light pure illuminant color
 
+rotateAnglesList = [10 0 50;
+    20 0 25;
+    40 0 30;
+    60 0 20];
+
+for n = 1:4
+
 rotateSequence = 'xyz';
-rotateAngles = [60 0 20];
+rotateAngles = rotateAnglesList(n,:);
 vInit = [0;-1;0];
 rotX = rotMatrix(rotateAngles(1),'x');
 rotY = rotMatrix(rotateAngles(2),'y');
@@ -43,7 +50,8 @@ axis equal vis3d;
 view(v);
 axis off;
 
-% filename = sprintf('copper_%d_%d_%d.bmp',rotateAngles(1),rotateAngles(2),rotateAngles(3));
-% saveas(gcf,filename);
+filename = sprintf('copper_%d_%d_%d.bmp',rotateAngles(1),rotateAngles(2),rotateAngles(3));
+saveas(gcf,filename);
 
+end
 % phongShadeView(surfaceType, lightColor, ka, kd, ks, ke, scr,v);
