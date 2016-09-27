@@ -2,13 +2,14 @@ clear;
 close all;
 
 ambientLightColor = [1 1 1];
-lightColor = [1 1 1];
+lightColor1 = [0.5 0.5 0.5];
+lightColor2 = [1 1 1];
 lightPosition1 = [1 -1 1];
 lightPosition2 = [-3 0 3];
 
-lightColors = [lightColor; lightColor];
+lightColors = [lightColor1; lightColor2];
 lightPositions = [lightPosition1; lightPosition2];
-numLights = 2;
+numLights = 1;
 
 % copper color map
 copperCM = copper(64);
@@ -22,6 +23,7 @@ im4 = imread('copper_60_0_20.bmp');
 numIms = 4;
 
 imrgbs = cat(numIms,im1,im2,im3,im4);
+% imrgbs = cat(numIms,im1(:,:,2),im2(:,:,2),im3(:,:,2),im4(:,:,2));
 % imgrays = squeeze(cat(numIms,rgb2gray(im1),rgb2gray(im2),rgb2gray(im3),rgb2gray(im4)));
 
 % coodinate to pixel
@@ -96,15 +98,15 @@ for i = 1:size(seenAll,1)
     currvertex =  vSeenAll(:,i);
     for lIndex = 1:numLights
         % Infinite light
-        lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)';
+%         lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)';
         % Local point light
-        % lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)' - currvertex;
+        lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)' - currvertex;
     end
 end
 
 predictPixels = zeros(size(pixels));
 
-ka = 0.2; kd = 0.5; ks = 0.5; ke = 5.0; scr = 1.0;
+ka = 0.3; kd = 0.6; ks = 0.9; ke = 10.0; scr = 0.9;
 
 epsilon = sqrt(eps(10000));
 
@@ -125,13 +127,12 @@ for i = 1:size(seenAll,1)
                     % Diffuse reflectance
                     predictPixels(i,:,n) = predictPixels(i,:,n) + ...
                         kd*(li'*normal) * copperRGB .* lightColors(lIndex,:);
-                    %                 /norm(li1diff)^2;
+%                     /norm(lightDiff)^2;
                     % Specular reflectance
                     r = 2*(li'*normal)*normal - li;
                     if r'*v > epsilon
                         predictPixels(i,:,n) = predictPixels(i,:,n) + ...
-                            ks*(r'*v)^ke * ((1-scr)*copperRGB + scr*lightColors(lIndex,:));
-                        %                     /norm(li1diff)^2;
+                            ks*(r'*v)^ke * ((1-scr)*copperRGB.*lightColors(lIndex,:) + scr*lightColors(lIndex,:));
                     end
                 end
             end
@@ -160,5 +161,6 @@ end
 
 for n = 1:numIms
     figure
-    imshow(impredict(:,:,:,n));
+    imshow(imabsdiff(impredict(:,:,:,n),imrgbs(:,:,:,n)));
+    sum(sum(imabsdiff(impredict(:,:,:,n),imrgbs(:,:,:,n))))
 end

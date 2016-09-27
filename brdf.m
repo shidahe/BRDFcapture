@@ -1,14 +1,15 @@
 clear;
 close all;
 % white light shines on 2 spheres
-lightColor = [1 1 1];
+lightColor1 = [0.5 0.5 0.5];
+lightColor2 = [1 1 1];
 % surfaceType = shiny
 surfaceType = 'shiny';
-ka = 0.2;
-kd = 0.5;
-ks = 0.5;
-ke = 5.0;
-scr = 1.0; % reflected light pure illuminant color
+ka = 0.3;
+kd = 0.6;
+ks = 0.9;
+ke = 10.0;
+scr = 0.9; % reflected light pure illuminant color
 
 rotateAnglesList = [10 0 50;
     20 0 25;
@@ -34,10 +35,10 @@ copperRGB = copperCM(52, :);
 hSphere1 = surf(xSphere, ySphere, zSphere);
 
 % light 1
-hL1 = light('Position', [1 -1 1], 'Color', lightColor);
+hL1 = light('Position', [1 -1 1], 'Color', lightColor1, 'Style', 'local');
 % light 2
-hL2 = light('Position', [-3 0 3], 'Color', lightColor);
-set(hSphere1, 'FaceLighting', 'phong',...
+% hL2 = light('Position', [-3 0 3], 'Color', lightColor2, 'Style', 'local');
+set(hSphere1, 'FaceLighting', 'flat',...
 'FaceColor', copperRGB,...
 'EdgeColor', 'none',...
 'AmbientStrength', ka, ...
@@ -49,6 +50,7 @@ set(hSphere1, 'FaceLighting', 'phong',...
 axis equal vis3d;
 view(v);
 axis off;
+
 
 filename = sprintf('copper_%d_%d_%d.bmp',rotateAngles(1),rotateAngles(2),rotateAngles(3));
 saveas(gcf,filename);
