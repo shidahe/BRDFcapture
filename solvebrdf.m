@@ -94,9 +94,9 @@ for i = 1:size(seenAll,1)
     currvertex =  vSeenAll(:,i);
     for lIndex = 1:numLights
         % Infinite light
-        lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)';
+%         lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)';
         % Local point light
-        % lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)' - currvertex;
+        lightDiffs(:,i,lIndex) = lightPositions(lIndex,:)' - currvertex;
     end
 end
 
@@ -123,13 +123,11 @@ for i = 1:size(seenAll,1)
                     % Diffuse reflectance
                     predictPixels(i,:,n) = predictPixels(i,:,n) + ...
                         kd*(li'*normal) * copperRGB .* lightColors(lIndex,:);
-                    %                 /norm(li1diff)^2;
                     % Specular reflectance
                     h = (li+v)/norm(li+v);
                     if normal'*h > epsilon
                         predictPixels(i,:,n) = predictPixels(i,:,n) + ...
                             ks*(normal'*h)^ke * ((1-scr)*copperRGB + scr*lightColors(lIndex,:));
-                        %                     /norm(li1diff)^2;
                     end
                 end
             end

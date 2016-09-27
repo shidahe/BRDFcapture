@@ -33,9 +33,9 @@ copperRGB = copperCM(52, :);
 hSphere1 = surf(xSphere, ySphere, zSphere);
 
 % light 1
-hL1 = light('Position', [1 -1 1], 'Color', lightColor);
+hL1 = light('Position', [1 -1 1], 'Color', lightColor,'Style', 'Local');
 % light 2
-hL2 = light('Position', [-3 0 3], 'Color', lightColor);
+hL2 = light('Position', [-3 0 3], 'Color', lightColor,'Style', 'Local');
 set(hSphere1, 'FaceLighting', 'phong',...
 'FaceColor', copperRGB,...
 'EdgeColor', 'none',...
