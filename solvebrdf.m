@@ -9,7 +9,7 @@ lightPosition2 = [-3 0 3];
 
 lightColors = [lightColor1; lightColor2];
 lightPositions = [lightPosition1; lightPosition2];
-numLights = 1;
+numLights = 2;
 
 % copper color map
 copperCM = copper(64);
