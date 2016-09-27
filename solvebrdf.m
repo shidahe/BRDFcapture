@@ -14,15 +14,19 @@ numLights = 2;
 copperCM = copper(64);
 copperRGB = copperCM(52, :);
 
-im1 = imread('copper_10_0_50.bmp');
-im2 = imread('copper_20_0_25.bmp');
-im3 = imread('copper_40_0_30.bmp');
+im1 = imread('copper_10_0_80.bmp');
+im2 = imread('copper_20_0_65.bmp');
+im3 = imread('copper_40_0_50.bmp');
 im4 = imread('copper_60_0_20.bmp');
-
 numIms = 4;
-
 imrgbs = cat(numIms,im1,im2,im3,im4);
 % imgrays = squeeze(cat(numIms,rgb2gray(im1),rgb2gray(im2),rgb2gray(im3),rgb2gray(im4)));
+
+viewAngles = zeros(numIms,3);
+viewAngles(1,:) = [10 0 80];
+viewAngles(2,:) = [20 0 65];
+viewAngles(3,:) = [40 0 50];
+viewAngles(4,:) = [60 0 20];
 
 % coodinate to pixel
 [spherePixx,spherePixy] = ind2sub(size(imrgbs(:,:,1,1)),find(imrgbs(:,:,1,1)<255));
@@ -31,12 +35,6 @@ pixelUnity = (max(spherePixy)-min(spherePixy))/2;
 pixelUnit = pixelUnitx;
 centerx = max(spherePixx) - pixelUnit;
 centery = max(spherePixy) - pixelUnit;
-
-viewAngles = zeros(numIms,3);
-viewAngles(1,:) = [10 0 50];
-viewAngles(2,:) = [20 0 25];
-viewAngles(3,:) = [40 0 30];
-viewAngles(4,:) = [60 0 20];
 
 % define a spherical object
 [xSphere, ySphere, zSphere] = sphere(180);
@@ -104,7 +102,7 @@ end
 
 predictPixels = zeros(size(pixels));
 
-ka = 0.2; kd = 0.5; ks = 0.5; ke = 5.0; scr = 1.0;
+ka = 0.2; kd = 0.5; ks = 0.5; ke = 5.0 * 4; scr = 1.0;
 
 epsilon = sqrt(eps(10000));
 
@@ -127,10 +125,10 @@ for i = 1:size(seenAll,1)
                         kd*(li'*normal) * copperRGB .* lightColors(lIndex,:);
                     %                 /norm(li1diff)^2;
                     % Specular reflectance
-                    r = 2*(li'*normal)*normal - li;
-                    if r'*v > epsilon
+                    h = (li+v)/norm(li+v);
+                    if normal'*h > epsilon
                         predictPixels(i,:,n) = predictPixels(i,:,n) + ...
-                            ks*(r'*v)^ke * ((1-scr)*copperRGB + scr*lightColors(lIndex,:));
+                            ks*(normal'*h)^ke * ((1-scr)*copperRGB + scr*lightColors(lIndex,:));
                         %                     /norm(li1diff)^2;
                     end
                 end

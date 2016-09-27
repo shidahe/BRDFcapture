@@ -10,19 +10,18 @@ ks = 0.5;
 ke = 5.0;
 scr = 1.0; % reflected light pure illuminant color
 
-rotateAnglesList = [10 0 50;
-    20 0 25;
-    40 0 30;
+rotateAngles = [10 0 80;
+    20 0 65;
+    40 0 50;
     60 0 20];
 
 for n = 1:4
 
 rotateSequence = 'xyz';
-rotateAngles = rotateAnglesList(n,:);
 vInit = [0;-1;0];
-rotX = rotMatrix(rotateAngles(1),'x');
-rotY = rotMatrix(rotateAngles(2),'y');
-rotZ = rotMatrix(rotateAngles(3),'z');
+rotX = rotMatrix(rotateAngles(n,1),'x');
+rotY = rotMatrix(rotateAngles(n,2),'y');
+rotZ = rotMatrix(rotateAngles(n,3),'z');
 v = vInit' * rotX * rotY * rotZ;
 
 % copper color map
@@ -50,7 +49,7 @@ axis equal vis3d;
 view(v);
 axis off;
 
-filename = sprintf('copper_%d_%d_%d.bmp',rotateAngles(1),rotateAngles(2),rotateAngles(3));
+filename = sprintf('copper_%d_%d_%d.bmp',rotateAngles(n,1),rotateAngles(n,2),rotateAngles(n,3));
 saveas(gcf,filename);
 
 end
