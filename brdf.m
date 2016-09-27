@@ -5,13 +5,13 @@ lightColor1 = [0.5 0.5 0.5];
 lightColor2 = [1 1 1];
 % surfaceType = shiny
 surfaceType = 'shiny';
-ka = 0.3;
-kd = 0.6;
-ks = 0.9;
-ke = 10.0;
-scr = 0.9; % reflected light pure illuminant color
+ka = 0.2;
+kd = 0.5;
+ks = 0.5;
+ke = 5.0;
+scr = 1.0; % reflected light pure illuminant color
 
-rotateAnglesList = [10 0 50;
+rotateAngles = [10 0 50;
     20 0 25;
     40 0 30;
     60 0 20];
@@ -19,11 +19,10 @@ rotateAnglesList = [10 0 50;
 for n = 1:4
 
 rotateSequence = 'xyz';
-rotateAngles = rotateAnglesList(n,:);
 vInit = [0;-1;0];
-rotX = rotMatrix(rotateAngles(1),'x');
-rotY = rotMatrix(rotateAngles(2),'y');
-rotZ = rotMatrix(rotateAngles(3),'z');
+rotX = rotMatrix(rotateAngles(n,1),'x');
+rotY = rotMatrix(rotateAngles(n,2),'y');
+rotZ = rotMatrix(rotateAngles(n,3),'z');
 v = vInit' * rotX * rotY * rotZ;
 
 % copper color map
@@ -35,10 +34,10 @@ copperRGB = copperCM(52, :);
 hSphere1 = surf(xSphere, ySphere, zSphere);
 
 % light 1
-hL1 = light('Position', [1 -1 1], 'Color', lightColor1, 'Style', 'local');
+hL1 = light('Position', [1 -1 1], 'Color', lightColor1,'Style', 'Local');
 % light 2
-% hL2 = light('Position', [-3 0 3], 'Color', lightColor2, 'Style', 'local');
-set(hSphere1, 'FaceLighting', 'flat',...
+hL2 = light('Position', [-3 0 3], 'Color', lightColor2,'Style', 'Local');
+set(hSphere1, 'FaceLighting', 'phong',...
 'FaceColor', copperRGB,...
 'EdgeColor', 'none',...
 'AmbientStrength', ka, ...
@@ -51,8 +50,7 @@ axis equal vis3d;
 view(v);
 axis off;
 
-
-filename = sprintf('copper_%d_%d_%d.bmp',rotateAngles(1),rotateAngles(2),rotateAngles(3));
+filename = sprintf('copper_%d_%d_%d.bmp',rotateAngles(n,1),rotateAngles(n,2),rotateAngles(n,3));
 saveas(gcf,filename);
 
 end
