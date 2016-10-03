@@ -2,7 +2,7 @@ function pixelDiff = rendering(Ks)
 
 global pixelInput v normal lightDiffSingle meterialColor ambientLightColor lightColors;
 % lightDiffSingle = lightDiffs(:,i,lIndex);
-pixel = 0;
+pixel = 0.0;
 epsilon = sqrt(eps(10000));
 numLights = size(lightColors,1);
 
@@ -34,3 +34,6 @@ if v'*normal > epsilon
 end
 
 pixelDiff = sum(abs(pixel-pixelInput));
+
+
+end

@@ -1,9 +1,10 @@
 clear;
 close all;
 
-global pixelInputs v normal lightDiffSingle meterialColor ambientLightColor lightColors;
+global pixelInputs normals lightDiffs meterialColor ambientLightColor lightColors;
 
 global viewPoints;
+
 ambientLightColor = [1 1 1];
 lightColor1 = [0.5 0.5 0.5];
 lightColor2 = [1 1 1];
@@ -164,10 +165,9 @@ for n = 1:numIms
     figure
     imshow(impredict(:,:,:,n));
 %     imshow(imabsdiff(impredict(:,:,:,n),imrgbs(:,:,:,n)));
-    sum(sum(imabsdiff(impredict(:,:,:,n),imrgbs(:,:,:,n))))
+%     sum(sum(imabsdiff(impredict(:,:,:,n),imrgbs(:,:,:,n))))
 end
 
 
-pixelInputs = predictPixels(i,:,:);
-lightDiffSingle = lightDiffs(:,i,:);
+pixelInputs = predictPixels(:,:,:);
 meterialColor = copperRGB;
